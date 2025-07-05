@@ -13,7 +13,7 @@ export class Url {
   @Column({ type: 'text', nullable: false })
   originalUrl: string;
 
-  @Column({ type: 'varchar', length: 10, unique: true })
+  @Column({ type: 'varchar', length: 10, unique: true, name: 'short_code' })
   shortCode: string;
 
   @CreateDateColumn()

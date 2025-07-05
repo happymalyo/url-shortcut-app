@@ -41,7 +41,10 @@ export class UrlService {
   }
 
   async getOriginalUrl(shortCode: string): Promise<string> {
-    const url = await this.urlRepository.findOne({ where: { shortCode } });
+    const url = await this.urlRepository
+      .createQueryBuilder()
+      .where('LOWER(short_code) = LOWER(:shortCode)', { shortCode })
+      .getOne();
     if (!url) {
       throw new NotFoundException('URL not found');
     }
@@ -51,13 +54,5 @@ export class UrlService {
     await this.urlRepository.save(url);
 
     return url.originalUrl;
-  }
-
-  async getUrlStats(shortCode: string): Promise<Url> {
-    const url = await this.urlRepository.findOne({ where: { shortCode } });
-    if (!url) {
-      throw new NotFoundException('URL not found');
-    }
-    return url;
   }
 }
